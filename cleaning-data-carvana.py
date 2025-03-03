@@ -293,44 +293,151 @@
 # print(f"Backward Selection Accuracy: {accuracy_backward:.4f}")
 # print(classification_report(y_test, y_pred_backward))
 
-############################
-############ confusion matrix
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import confusion_matrix, classification_report
+####################################################################################
+# ############ confusion matrix with chosen variables
+# import pandas as pd
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import seaborn as sns
+# from sklearn.model_selection import train_test_split
+# from sklearn.ensemble import RandomForestClassifier
+# from sklearn.metrics import confusion_matrix, classification_report
 
-# Load the dataset from CSV
-file_path = "Model3.csv"
+# # Load the dataset from CSV
+# file_path = "Model3.csv"
+# df = pd.read_csv(file_path)
+
+# # Define features and target variable
+# X = df.drop(columns=["IsBadBuy"])
+# y = df["IsBadBuy"]
+
+# # Split data into training and testing sets
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# # Train a Random Forest model
+# model = RandomForestClassifier(random_state=42)
+# model.fit(X_train, y_train)
+
+# # Make predictions
+# y_pred = model.predict(X_test)
+
+# # Compute confusion matrix
+# cm = confusion_matrix(y_test, y_pred)
+
+# # Plot confusion matrix
+# plt.figure(figsize=(5,4))
+# sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=["Not Bad Buy", "Bad Buy"], yticklabels=["Not Bad Buy", "Bad Buy"])
+# plt.xlabel("Predicted")
+# plt.ylabel("Actual")
+# plt.title("Confusion Matrix")
+# plt.show()
+
+# # Print classification report
+# print(classification_report(y_test, y_pred))
+
+####################################################################################
+# ############ confusion matrix with all variables
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+from sklearn.impute import SimpleImputer
+
+# Load the dataset
+file_path = "training.csv"
 df = pd.read_csv(file_path)
 
-# Define features and target variable
-X = df.drop(columns=["IsBadBuy"])
+# Handle the PurchDate issue (drop it since it's non-numeric)
+if "PurchDate" in df.columns:
+    df = df.drop(columns=["PurchDate"])  
+
+# Encode categorical variables
+label_encoders = {}
+for col in df.select_dtypes(include=["object"]).columns:
+    le = LabelEncoder()
+    df[col] = le.fit_transform(df[col].astype(str))  # Convert to numerical
+    label_encoders[col] = le  
+
+# Define features (X) and target (y)
+X = df.drop(columns=["IsBadBuy"])  
 y = df["IsBadBuy"]
+
+# Handle missing values in X (features)
+imputer = SimpleImputer(strategy="median")  # Fill missing values with median
+X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)  
+
+# Drop rows where the target variable (y) is NaN
+X = X[y.notna()]
+y = y.dropna()
 
 # Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Train a Random Forest model
-model = RandomForestClassifier(random_state=42)
+# Train Logistic Regression model
+model = LogisticRegression(max_iter=1000)
 model.fit(X_train, y_train)
 
-# Make predictions
+# Generate predictions
 y_pred = model.predict(X_test)
 
 # Compute confusion matrix
 cm = confusion_matrix(y_test, y_pred)
 
-# Plot confusion matrix
-plt.figure(figsize=(5,4))
-sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=["Not Bad Buy", "Bad Buy"], yticklabels=["Not Bad Buy", "Bad Buy"])
-plt.xlabel("Predicted")
-plt.ylabel("Actual")
+# Plot the confusion matrix
+plt.figure(figsize=(6, 5))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=["Good Buy", "Bad Buy"], yticklabels=["Good Buy", "Bad Buy"])
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
 plt.title("Confusion Matrix")
 plt.show()
 
-# Print classification report
-print(classification_report(y_test, y_pred))
+
+############################################################################################
+##############################logistic correlation matrix with choosen variables in model3
+
+# import pandas as pd
+# import seaborn as sns
+# import matplotlib.pyplot as plt
+
+# # Load the dataset from CSV
+# file_path = "Model3.csv"
+# df = pd.read_csv(file_path)
+
+# # Drop the target variable ("IsBadBuy") since it's categorical (binary)
+# X = df.drop(columns=["IsBadBuy"])
+
+# # Compute the correlation matrix
+# corr_matrix = X.corr(method="pearson")
+
+# # Plot the heatmap
+# plt.figure(figsize=(10, 8))
+# sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+# plt.title("Correlation Matrix for Logistic Regression")
+# plt.show()
+
+############################################################################################
+##############################logistic correlation matrix with all variables in training.csv
+
+# import pandas as pd
+# import seaborn as sns
+# import matplotlib.pyplot as plt
+
+# # Load the dataset from CSV
+# file_path = "training.csv"
+# df = pd.read_csv(file_path)
+
+# # Drop non-numeric columns
+# df = df.select_dtypes(include=["number"])  # Keeps only numerical columns
+
+# # Compute the correlation matrix
+# corr_matrix = df.corr(method="pearson")
+
+# # Plot the heatmap
+# plt.figure(figsize=(10, 8))
+# sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+# plt.title("Correlation Matrix for Logistic Regression")
+# plt.show()
