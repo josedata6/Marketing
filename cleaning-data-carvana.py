@@ -338,62 +338,62 @@
 ####################################################################################
 # ############ confusion matrix with all variables
 
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix
-from sklearn.impute import SimpleImputer
+# import pandas as pd
+# import seaborn as sns
+# import matplotlib.pyplot as plt
+# from sklearn.model_selection import train_test_split
+# from sklearn.preprocessing import LabelEncoder
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.metrics import confusion_matrix
+# from sklearn.impute import SimpleImputer
 
-# Load the dataset
-file_path = "training.csv"
-df = pd.read_csv(file_path)
+# # Load the dataset
+# file_path = "training.csv"
+# df = pd.read_csv(file_path)
 
-# Handle the PurchDate issue (drop it since it's non-numeric)
-if "PurchDate" in df.columns:
-    df = df.drop(columns=["PurchDate"])  
+# # Handle the PurchDate issue (drop it since it's non-numeric)
+# if "PurchDate" in df.columns:
+#     df = df.drop(columns=["PurchDate"])  
 
-# Encode categorical variables
-label_encoders = {}
-for col in df.select_dtypes(include=["object"]).columns:
-    le = LabelEncoder()
-    df[col] = le.fit_transform(df[col].astype(str))  # Convert to numerical
-    label_encoders[col] = le  
+# # Encode categorical variables
+# label_encoders = {}
+# for col in df.select_dtypes(include=["object"]).columns:
+#     le = LabelEncoder()
+#     df[col] = le.fit_transform(df[col].astype(str))  # Convert to numerical
+#     label_encoders[col] = le  
 
-# Define features (X) and target (y)
-X = df.drop(columns=["IsBadBuy"])  
-y = df["IsBadBuy"]
+# # Define features (X) and target (y)
+# X = df.drop(columns=["IsBadBuy"])  
+# y = df["IsBadBuy"]
 
-# Handle missing values in X (features)
-imputer = SimpleImputer(strategy="median")  # Fill missing values with median
-X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)  
+# # Handle missing values in X (features)
+# imputer = SimpleImputer(strategy="median")  # Fill missing values with median
+# X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)  
 
-# Drop rows where the target variable (y) is NaN
-X = X[y.notna()]
-y = y.dropna()
+# # Drop rows where the target variable (y) is NaN
+# X = X[y.notna()]
+# y = y.dropna()
 
-# Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# # Split data into training and testing sets
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Train Logistic Regression model
-model = LogisticRegression(max_iter=1000)
-model.fit(X_train, y_train)
+# # Train Logistic Regression model
+# model = LogisticRegression(max_iter=1000)
+# model.fit(X_train, y_train)
 
-# Generate predictions
-y_pred = model.predict(X_test)
+# # Generate predictions
+# y_pred = model.predict(X_test)
 
-# Compute confusion matrix
-cm = confusion_matrix(y_test, y_pred)
+# # Compute confusion matrix
+# cm = confusion_matrix(y_test, y_pred)
 
-# Plot the confusion matrix
-plt.figure(figsize=(6, 5))
-sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=["Good Buy", "Bad Buy"], yticklabels=["Good Buy", "Bad Buy"])
-plt.xlabel("Predicted Label")
-plt.ylabel("True Label")
-plt.title("Confusion Matrix")
-plt.show()
+# # Plot the confusion matrix
+# plt.figure(figsize=(6, 5))
+# sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=["Good Buy", "Bad Buy"], yticklabels=["Good Buy", "Bad Buy"])
+# plt.xlabel("Predicted Label")
+# plt.ylabel("True Label")
+# plt.title("Confusion Matrix")
+# plt.show()
 
 
 ############################################################################################
@@ -441,3 +441,38 @@ plt.show()
 # sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
 # plt.title("Correlation Matrix for Logistic Regression")
 # plt.show()
+
+##########################
+########## testing other confusion matrix
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+
+# Load the data
+data = pd.read_csv('Model3.csv')
+
+# Prepare the data
+X = data.drop('IsBadBuy', axis=1)  # Features
+y = data['IsBadBuy']  # Target variable
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Train a Logistic Regression model
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test)
+
+# Create confusion matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+# Display the confusion matrix
+disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=model.classes_)
+disp.plot(cmap=plt.cm.Blues)
+plt.title('Confusion Matrix')
+plt.show()
