@@ -85,76 +85,252 @@
 
 ######################################
 
+# import pandas as pd
+# import numpy as np
+# from sklearn.model_selection import train_test_split
+# from sklearn.preprocessing import StandardScaler
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.metrics import classification_report, accuracy_score
+
+# # Load data
+# df = pd.read_csv("training-3.csv")
+
+# # Selecting relevant variables
+# features = [
+#     "VehYear", "VehicleAge", "VehOdo", "MMRAcquisitionAuctionAveragePrice",
+#     "MMRAcquisitionAuctionCleanPrice", "MMRAcquisitionRetailAveragePrice",
+#     "MMRCurrentAuctionAveragePrice", "MMRCurrentRetailAveragePrice",
+#     "WarrantyCost", "IsOnlineSale"
+# ]
+
+# # Handling categorical variables (encoding)
+# df = pd.get_dummies(df, columns=["Transmission", "WheelType", "Nationality", "Size", "TopThreeAmericanName"], drop_first=True)
+
+# # Define X and y
+# X = df[features]
+# y = df["IsBadBuy"]
+
+# # Check for missing values
+# X.fillna(X.median(), inplace=True)
+# y.fillna(0, inplace=True)
+
+# # Convert y to integer type
+# y = y.astype(int)
+
+# # Splitting data into training and test sets
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# # Standardizing numeric features
+# scaler = StandardScaler()
+# X_train = scaler.fit_transform(X_train)
+# X_test = scaler.transform(X_test)
+
+# # Reshape y_train if needed
+# y_train = y_train.ravel()
+
+# # Logistic Regression Model
+# model = LogisticRegression(max_iter=1000)
+# model.fit(X_train, y_train)
+
+# # Predictions
+# y_pred = model.predict(X_test)
+
+# # Model Evaluation
+# print("Accuracy:", accuracy_score(y_test, y_pred))
+# print("Classification Report:\n", classification_report(y_test, y_pred))
+
+# ######### over sample
+# from imblearn.over_sampling import SMOTE
+
+# smote = SMOTE(sampling_strategy='auto', random_state=42)
+# X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
+
+# model.fit(X_train_balanced, y_train_balanced)
+
+# #### penalize misclassification of minority class (Bad Buy) by setting class weights:
+# model = LogisticRegression(class_weight="balanced", max_iter=1000)
+# model.fit(X_train, y_train)
+
+# ####Random Forest
+# from sklearn.ensemble import RandomForestClassifier
+
+# rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+# rf_model.fit(X_train, y_train)
+
+# y_pred = rf_model.predict(X_test)
+
+
+###############################
+########## testing less variables
+
+# import pandas as pd
+# import numpy as np
+# from sklearn.model_selection import train_test_split
+# from sklearn.preprocessing import StandardScaler
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.metrics import classification_report, accuracy_score
+
+# # Load data
+# df = pd.read_csv("training-3.csv")
+
+# # Selecting relevant variables
+# features = [
+#     "VehicleAge", "VehOdo",
+#     "MMRCurrentAuctionAveragePrice", "MMRCurrentRetailAveragePrice",
+#     "WarrantyCost"
+# ]
+
+# # Handling categorical variables (encoding)
+# # df = pd.get_dummies(df, columns=["Transmission", "WheelType", "Nationality", "Size", "TopThreeAmericanName"], drop_first=True)
+
+# # Define X and y
+# X = df[features]
+# y = df["IsBadBuy"]
+
+# # Check for missing values
+# X.fillna(X.median(), inplace=True)
+# y.fillna(0, inplace=True)
+
+# # Convert y to integer type
+# y = y.astype(int)
+
+# # Splitting data into training and test sets
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# # Standardizing numeric features
+# scaler = StandardScaler()
+# X_train = scaler.fit_transform(X_train)
+# X_test = scaler.transform(X_test)
+
+# # Reshape y_train if needed
+# y_train = y_train.ravel()
+
+# # Logistic Regression Model
+# model = LogisticRegression(max_iter=1000)
+# model.fit(X_train, y_train)
+
+# # Predictions
+# y_pred = model.predict(X_test)
+
+# # Model Evaluation
+# print("Accuracy:", accuracy_score(y_test, y_pred))
+# print("Classification Report:\n", classification_report(y_test, y_pred))
+
+# ######### over sample
+# from imblearn.over_sampling import SMOTE
+
+# smote = SMOTE(sampling_strategy='auto', random_state=42)
+# X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
+
+# model.fit(X_train_balanced, y_train_balanced)
+
+# #### penalize misclassification of minority class (Bad Buy) by setting class weights:
+# model = LogisticRegression(class_weight="balanced", max_iter=1000)
+# model.fit(X_train, y_train)
+
+# ####Random Forest
+# from sklearn.ensemble import RandomForestClassifier
+
+# rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+# rf_model.fit(X_train, y_train)
+
+# y_pred = rf_model.predict(X_test)
+
+################## variables selected with foward and back fill
+
+# import numpy as np
+# import pandas as pd
+# from sklearn.model_selection import train_test_split
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.metrics import accuracy_score, classification_report
+# from sklearn.feature_selection import SequentialFeatureSelector
+
+# # Load the CSV data
+# df = pd.read_csv("training-3.csv")
+
+# # Select features and target variable
+# features = ["VehicleAge", "VehOdo", "MMRCurrentAuctionAveragePrice", "MMRCurrentRetailAveragePrice", "WarrantyCost"]
+# target = "IsBadBuy"
+
+# # Check for missing values and handle them (e.g., fill with mean)
+# for feature in features:
+#     if df[feature].isnull().any():
+#         df[feature].fillna(df[feature].mean(), inplace=True)
+
+# # Split data into training and testing sets
+# X_train, X_test, y_train, y_test = train_test_split(df[features], df[target], test_size=0.2, random_state=42)
+
+# # Initialize the Logistic Regression model
+# model = LogisticRegression(max_iter=1000)  # Increase max_iter for convergence
+
+# # Forward Feature Selection
+# forward_selector = SequentialFeatureSelector(model, n_features_to_select="auto", direction="forward", cv=5)
+# forward_selector.fit(X_train, y_train)
+# selected_forward = X_train.columns[forward_selector.get_support()]
+# print(f"Selected Features (Forward): {list(selected_forward)}")
+
+# # Backward Feature Selection
+# backward_selector = SequentialFeatureSelector(model, n_features_to_select="auto", direction="backward", cv=5)
+# backward_selector.fit(X_train, y_train)
+# selected_backward = X_train.columns[backward_selector.get_support()]
+# print(f"Selected Features (Backward): {list(selected_backward)}")
+
+# # Train and Evaluate Models
+# X_train_forward, X_test_forward = X_train[selected_forward], X_test[selected_forward]
+# X_train_backward, X_test_backward = X_train[selected_backward], X_test[selected_backward]
+
+# # Train forward selection model
+# model.fit(X_train_forward, y_train)
+# y_pred_forward = model.predict(X_test_forward)
+# accuracy_forward = accuracy_score(y_test, y_pred_forward)
+# print(f"Forward Selection Accuracy: {accuracy_forward:.4f}")
+# print(classification_report(y_test, y_pred_forward))
+
+# # Train backward selection model
+# model.fit(X_train_backward, y_train)
+# y_pred_backward = model.predict(X_test_backward)
+# accuracy_backward = accuracy_score(y_test, y_pred_backward)
+# print(f"Backward Selection Accuracy: {accuracy_backward:.4f}")
+# print(classification_report(y_test, y_pred_backward))
+
+############################
+############ confusion matrix
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, classification_report
 
-# Load data
-df = pd.read_csv("training-3.csv")
+# Load the dataset from CSV
+file_path = "Model3.csv"
+df = pd.read_csv(file_path)
 
-# Selecting relevant variables
-features = [
-    "VehYear", "VehicleAge", "VehOdo", "MMRAcquisitionAuctionAveragePrice",
-    "MMRAcquisitionAuctionCleanPrice", "MMRAcquisitionRetailAveragePrice",
-    "MMRCurrentAuctionAveragePrice", "MMRCurrentRetailAveragePrice",
-    "WarrantyCost", "IsOnlineSale"
-]
-
-# Handling categorical variables (encoding)
-df = pd.get_dummies(df, columns=["Transmission", "WheelType", "Nationality", "Size", "TopThreeAmericanName"], drop_first=True)
-
-# Define X and y
-X = df[features]
+# Define features and target variable
+X = df.drop(columns=["IsBadBuy"])
 y = df["IsBadBuy"]
 
-# Check for missing values
-X.fillna(X.median(), inplace=True)
-y.fillna(0, inplace=True)
-
-# Convert y to integer type
-y = y.astype(int)
-
-# Splitting data into training and test sets
+# Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Standardizing numeric features
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
-
-# Reshape y_train if needed
-y_train = y_train.ravel()
-
-# Logistic Regression Model
-model = LogisticRegression(max_iter=1000)
+# Train a Random Forest model
+model = RandomForestClassifier(random_state=42)
 model.fit(X_train, y_train)
 
-# Predictions
+# Make predictions
 y_pred = model.predict(X_test)
 
-# Model Evaluation
-print("Accuracy:", accuracy_score(y_test, y_pred))
-print("Classification Report:\n", classification_report(y_test, y_pred))
+# Compute confusion matrix
+cm = confusion_matrix(y_test, y_pred)
 
-######### over sample
-from imblearn.over_sampling import SMOTE
+# Plot confusion matrix
+plt.figure(figsize=(5,4))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=["Not Bad Buy", "Bad Buy"], yticklabels=["Not Bad Buy", "Bad Buy"])
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix")
+plt.show()
 
-smote = SMOTE(sampling_strategy='auto', random_state=42)
-X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
-
-model.fit(X_train_balanced, y_train_balanced)
-
-#### penalize misclassification of minority class (Bad Buy) by setting class weights:
-model = LogisticRegression(class_weight="balanced", max_iter=1000)
-model.fit(X_train, y_train)
-
-####Random Forest
-from sklearn.ensemble import RandomForestClassifier
-
-rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-rf_model.fit(X_train, y_train)
-
-y_pred = rf_model.predict(X_test)
+# Print classification report
+print(classification_report(y_test, y_pred))
