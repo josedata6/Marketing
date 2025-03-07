@@ -1,0 +1,83 @@
+[
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "seaborn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "seaborn",
+        "description": "seaborn",
+        "detail": "seaborn",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "file_path",
+        "kind": 5,
+        "importPath": "cleaning-data-carvana",
+        "description": "cleaning-data-carvana",
+        "peekOfCode": "file_path = \"Model3.csv\"\ndf = pd.read_csv(file_path)\n# Drop the target variable (\"IsBadBuy\") since it's categorical (binary)\nX = df.drop(columns=[\"IsBadBuy\"])\n# Compute the correlation matrix\ncorr_matrix = X.corr(method=\"pearson\")\n# Create a mask for the upper triangle\nmask = np.triu(np.ones_like(corr_matrix, dtype=bool))\n# Plot the heatmap with the mask\nplt.figure(figsize=(10, 8))",
+        "detail": "cleaning-data-carvana",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "cleaning-data-carvana",
+        "description": "cleaning-data-carvana",
+        "peekOfCode": "df = pd.read_csv(file_path)\n# Drop the target variable (\"IsBadBuy\") since it's categorical (binary)\nX = df.drop(columns=[\"IsBadBuy\"])\n# Compute the correlation matrix\ncorr_matrix = X.corr(method=\"pearson\")\n# Create a mask for the upper triangle\nmask = np.triu(np.ones_like(corr_matrix, dtype=bool))\n# Plot the heatmap with the mask\nplt.figure(figsize=(10, 8))\nsns.heatmap(corr_matrix, mask=mask, annot=True, cmap=\"coolwarm\", fmt=\".2f\", linewidths=0.5)",
+        "detail": "cleaning-data-carvana",
+        "documentation": {}
+    },
+    {
+        "label": "X",
+        "kind": 5,
+        "importPath": "cleaning-data-carvana",
+        "description": "cleaning-data-carvana",
+        "peekOfCode": "X = df.drop(columns=[\"IsBadBuy\"])\n# Compute the correlation matrix\ncorr_matrix = X.corr(method=\"pearson\")\n# Create a mask for the upper triangle\nmask = np.triu(np.ones_like(corr_matrix, dtype=bool))\n# Plot the heatmap with the mask\nplt.figure(figsize=(10, 8))\nsns.heatmap(corr_matrix, mask=mask, annot=True, cmap=\"coolwarm\", fmt=\".2f\", linewidths=0.5)\nplt.title(\"Correlation Matrix for Logistic Regression (Lower Triangle)\")\nplt.show()",
+        "detail": "cleaning-data-carvana",
+        "documentation": {}
+    },
+    {
+        "label": "corr_matrix",
+        "kind": 5,
+        "importPath": "cleaning-data-carvana",
+        "description": "cleaning-data-carvana",
+        "peekOfCode": "corr_matrix = X.corr(method=\"pearson\")\n# Create a mask for the upper triangle\nmask = np.triu(np.ones_like(corr_matrix, dtype=bool))\n# Plot the heatmap with the mask\nplt.figure(figsize=(10, 8))\nsns.heatmap(corr_matrix, mask=mask, annot=True, cmap=\"coolwarm\", fmt=\".2f\", linewidths=0.5)\nplt.title(\"Correlation Matrix for Logistic Regression (Lower Triangle)\")\nplt.show()",
+        "detail": "cleaning-data-carvana",
+        "documentation": {}
+    },
+    {
+        "label": "mask",
+        "kind": 5,
+        "importPath": "cleaning-data-carvana",
+        "description": "cleaning-data-carvana",
+        "peekOfCode": "mask = np.triu(np.ones_like(corr_matrix, dtype=bool))\n# Plot the heatmap with the mask\nplt.figure(figsize=(10, 8))\nsns.heatmap(corr_matrix, mask=mask, annot=True, cmap=\"coolwarm\", fmt=\".2f\", linewidths=0.5)\nplt.title(\"Correlation Matrix for Logistic Regression (Lower Triangle)\")\nplt.show()",
+        "detail": "cleaning-data-carvana",
+        "documentation": {}
+    }
+]

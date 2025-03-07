@@ -443,36 +443,103 @@
 # plt.show()
 
 ##########################
-########## testing other confusion matrix
+########## testing other confusion matrix model 3
+
+# import pandas as pd
+# from sklearn.model_selection import train_test_split
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+# import matplotlib.pyplot as plt
+
+# # Load the data
+# data = pd.read_csv('Model3.csv')
+
+# # Prepare the data
+# X = data.drop('IsBadBuy', axis=1)  # Features
+# y = data['IsBadBuy']  # Target variable
+
+# # Split the data into training and testing sets
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# # Train a Logistic Regression model
+# model = LogisticRegression(max_iter=1000)
+# model.fit(X_train, y_train)
+
+# # Make predictions
+# y_pred = model.predict(X_test)
+
+# # Create confusion matrix
+# conf_matrix = confusion_matrix(y_test, y_pred)
+
+# # Display the confusion matrix
+# disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=model.classes_)
+# disp.plot(cmap=plt.cm.Blues)
+# plt.title('Confusion Matrix')
+# plt.show()
+
+##########################
+########## testing other confusion matrix model 2
+
+# import pandas as pd
+# from sklearn.model_selection import train_test_split
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+# from sklearn.impute import SimpleImputer
+# import matplotlib.pyplot as plt
+
+# # Load the data
+# data = pd.read_csv('Model2.csv')
+
+# # Prepare the data
+# X = data.drop('IsBadBuy', axis=1)  # Features
+# y = data['IsBadBuy']  # Target variable
+
+# # Handle missing values using SimpleImputer
+# imputer = SimpleImputer(strategy='mean')  # Use 'mean', 'median', or 'most_frequent'
+# X = imputer.fit_transform(X)
+
+# # Split the data into training and testing sets
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# # Train a Logistic Regression model
+# model = LogisticRegression(max_iter=1000)
+# model.fit(X_train, y_train)
+
+# # Make predictions
+# y_pred = model.predict(X_test)
+
+# # Create confusion matrix
+# conf_matrix = confusion_matrix(y_test, y_pred)
+
+# # Display the confusion matrix
+# disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=model.classes_)
+# disp.plot(cmap=plt.cm.Blues)
+# plt.title('Confusion Matrix Model 2')
+# plt.show()
+
+##############################################################################################################################################################
+##############################logistic correlation matrix with choosen variables in model3 masking top part
 
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np  # Import numpy for creating the mask
 
-# Load the data
-data = pd.read_csv('Model3.csv')
+# Load the dataset from CSV
+file_path = "Model3.csv"
+df = pd.read_csv(file_path)
 
-# Prepare the data
-X = data.drop('IsBadBuy', axis=1)  # Features
-y = data['IsBadBuy']  # Target variable
+# Drop the target variable ("IsBadBuy") since it's categorical (binary)
+X = df.drop(columns=["IsBadBuy"])
 
-# Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+# Compute the correlation matrix
+corr_matrix = X.corr(method="pearson")
 
-# Train a Logistic Regression model
-model = LogisticRegression(max_iter=1000)
-model.fit(X_train, y_train)
+# Create a mask for the upper triangle
+mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
 
-# Make predictions
-y_pred = model.predict(X_test)
-
-# Create confusion matrix
-conf_matrix = confusion_matrix(y_test, y_pred)
-
-# Display the confusion matrix
-disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=model.classes_)
-disp.plot(cmap=plt.cm.Blues)
-plt.title('Confusion Matrix')
+# Plot the heatmap with the mask
+plt.figure(figsize=(10, 8))
+sns.heatmap(corr_matrix, mask=mask, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+plt.title("Correlation Matrix for Logistic Regression (Lower Triangle)")
 plt.show()
